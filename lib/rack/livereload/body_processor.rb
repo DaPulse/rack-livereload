@@ -14,7 +14,7 @@ module Rack
       end
 
       def livereload_local_uri
-        "#{protocol}://localhost:#{@options[:live_reload_port]}/livereload.js"
+        "#{protocol}://livereload:#{@options[:live_reload_port]}/livereload.js"
       end
 
       def initialize(body, options)
@@ -90,7 +90,7 @@ module Rack
       end
 
       def host_to_use
-        (@options[:host] || @env['HTTP_HOST'] || 'localhost').gsub(%r{:.*}, '')
+        (@options[:host] || @env['HTTP_HOST'] || 'livereload').gsub(%r{:.*}, '')
       end
 
       def template
@@ -101,7 +101,7 @@ module Rack
         if use_vendored?
           src = "#{app_root}#{LIVERELOAD_JS_PATH.dup}?host=#{host_to_use}"
         else
-          src = livereload_local_uri.dup.gsub('localhost', host_to_use) + '?'
+          src = livereload_local_uri.dup.gsub('livereload', host_to_use) + '?'
         end
 
         src << "&amp;mindelay=#{@options[:min_delay]}" if @options[:min_delay]
